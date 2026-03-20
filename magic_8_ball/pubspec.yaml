@@ -20,6 +20,13 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  assets:
+    - assets/magic_8_ball.png
+    - assets/triangle1.png
+    - assets/triangle2.png
+    - assets/triangle3.png
+    - assets/triangle4.png
+
 flutter_icons:
   android: true
   ios: true
