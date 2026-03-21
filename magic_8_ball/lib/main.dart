@@ -1,10 +1,13 @@
+//Items needed to randomly generate numbers and grab the library
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+//Starts up the app
 void main() {
   runApp(Magic8BallApp());
 }
 
+//Main app and this part doesn't change
 class Magic8BallApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,16 +18,19 @@ class Magic8BallApp extends StatelessWidget {
   }
 }
 
+//This basically allows for the screen to change since the answer changes
 class Magic8BallScreen extends StatefulWidget {
   @override
   _Magic8BallScreenState createState() => _Magic8BallScreenState();
 }
 
+//Where the changes happen
 class _Magic8BallScreenState extends State<Magic8BallScreen>
     with SingleTickerProviderStateMixin {
   int answerIndex = 1; // Current triangle answer
   double opacity = 1.0; // For fading triangle
 
+  //This handles the shaking animation
   late AnimationController _controller;
   late Animation<double> _shakeAnimation;
 
@@ -62,6 +68,7 @@ class _Magic8BallScreenState extends State<Magic8BallScreen>
     super.dispose();
   }
 
+  //What happens when the button is pressed
   void revealAnswer() {
     setState(() {
       opacity = 0.0; // fade out old triangle
