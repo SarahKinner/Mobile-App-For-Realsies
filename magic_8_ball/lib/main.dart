@@ -20,29 +20,54 @@ class Magic8BallScreen extends StatefulWidget {
   _Magic8BallScreenState createState() => _Magic8BallScreenState();
 }
 
-class _Magic8BallScreenState extends State<Magic8BallScreen> {
-  int answerIndex = 1; // Current triangle image
-  double opacity = 1.0; // Controls fade animation
+class _Magic8BallScreenState extends State<Magic8BallScreen>
+    with SingleTickerProviderStateMixin {
+  int answerIndex = 1; // Current triangle answer
+  double opacity = 1.0; // For fading triangle
 
-  // Function to change the answer with animation
-  void revealAnswer() async {
-    // Step 1: Fade OUT
+  late AnimationController _controller;
+  late Animation<double> _shakeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Animation controller for the shake
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 600), // total shake time
+    );
+
+    // Tween for subtle left-right shake around center
+    _shakeAnimation = TweenSequence([
+      TweenSequenceItem(tween: Tween<double>(begin: 0, end: -20), weight: 1),
+      TweenSequenceItem(tween: Tween<double>(begin: -20, end: 20), weight: 2),
+      TweenSequenceItem(tween: Tween<double>(begin: 20, end: 0), weight: 1),
+    ]).animate(_controller);
+
+    // When shake finishes, reveal new answer
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          answerIndex = Random().nextInt(4) + 1; // pick new triangle
+          opacity = 1.0; // fade it in
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void revealAnswer() {
     setState(() {
-      opacity = 0.0;
+      opacity = 0.0; // fade out old triangle
     });
 
-    // Wait for fade-out animation
-    await Future.delayed(Duration(milliseconds: 500));
-
-    // Step 2: Change the answer
-    setState(() {
-      answerIndex = Random().nextInt(4) + 1;
-    });
-
-    // Step 3: Fade IN
-    setState(() {
-      opacity = 1.0;
-    });
+    _controller.forward(from: 0); // start shake
   }
 
   @override
@@ -58,33 +83,43 @@ class _Magic8BallScreenState extends State<Magic8BallScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
 
-            // Stack lets us layer the triangle on top of the 8-ball
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(
-                  'assets/magic_8_ball.png',
-                  width: 500,
-                ),
-
-                // AnimatedOpacity creates the fade effect
-                AnimatedOpacity(
-                  opacity: opacity,
-                  duration: Duration(milliseconds: 500),
-                  child: Image.asset(
-                    'assets/triangle$answerIndex.png',
+            // Animated shake
+            AnimatedBuilder(
+              animation: _shakeAnimation,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(_shakeAnimation.value, 0), // left-right only
+                  child: child,
+                );
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // 8-ball image
+                  Image.asset(
+                    'assets/magic_8_ball.png',
                     width: 500,
                   ),
-                ),
-              ],
+
+                  // Triangle answer (fade in/out)
+                  AnimatedOpacity(
+                    opacity: opacity,
+                    duration: Duration(milliseconds: 300),
+                    child: Image.asset(
+                      'assets/triangle$answerIndex.png',
+                      width: 500,
+                    ),
+                  ),
+                ],
+              ),
             ),
 
             SizedBox(height: 30),
 
-            // Your "stupid" button 😄
+            // Reveal button
             ElevatedButton(
               onPressed: revealAnswer,
-              child: Text("Reveal the answer to you 🔮"),
+              child: Text("Reveal the answer to you"),
             ),
           ],
         ),

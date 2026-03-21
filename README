@@ -5,36 +5,35 @@ People are first greeted with a app icon of the 8 ball and once the user clicks 
 
 Steps to build and/or run the software:
 
-1. First step here
-2.
-3.
+1. Have flutter downloaded through their website
+2. Use flutter create Insert_Name to make the folder with prepared code needed to make it work
+3. Download Xcode for the simulation and connect it through the terminal
 
 Instructions for using the software:
 
-1. First step here
-2.
-3.
+1. Have Xcode connected first
+2. Have the simulator open
+3. Type in flutter run and wait for the app to be downlaoded
+4. After you did that for the first the next time you want to do that hit the darwin at the bottom, search should open up and then hit mobile simulator
+
 
 ## Development Environment
 
 To recreate the development environment, you need the following software and/or libraries with the specified versions:
 
-* First thing here
-*
-*
+* Flutter
+* Xcode
 
 ## Useful Websites to Learn More
 
 I found these websites useful in developing this software:
 
-* [Website Title](Link)
-*
-*
+* [How to Install Flutter on Mac | Android Studio | Xcode Simulator (2026)](https://www.youtube.com/watch?v=VXswG6ZlZsM)
 
 ## Future Work
 
 The following items I plan to fix, improve, and/or add to this project in the future:
 
-* [ ] First thing here
-* [ ]
-* [ ]
+* Make it more design friendly since the home screen is mostly dark
+* Add more answers for the ball
+* Maybe user customization such as change the color of the background and what 8 ball they want to use
